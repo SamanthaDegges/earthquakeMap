@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Places</title>
+</head>
+<body>
+
+<div class="container-fluid">
+  <div id="main">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2">
+        <h4>MAP</h4>
+        <div id="mapContainer">
+          <div id="map"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src = "https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="main.js"></script>
+
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_2WXrXlP9hst8Pnv9bQtL0zrbZq_zqK0&signed_in=true&libraries=places&callback=initMap" async defer></script>
+
+  </body>
+</html>

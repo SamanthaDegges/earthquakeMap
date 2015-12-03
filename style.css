@@ -1,0 +1,10 @@
+#main {
+  color: red;
+}
+#mapContainer {
+  height: 400px;
+}
+
+#map {
+ height: 100%;
+}
