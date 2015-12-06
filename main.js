@@ -1,133 +1,101 @@
 'use strict'
 
+$(document).ready(getGeoLoc);
+
 var map;
 var infowindow;
+var clientLocation;
 
-function initMap() {
-  var pyrmont = {lat: -33.867, lng: 151.195};
-
-  map = new google.maps.Map(document.getElementById('map'), {
-    center: pyrmont,
-    zoom: 15
+function getGeoLoc(data) {
+  $.ajax({
+    method: "POST",
+    url: "https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyC_2WXrXlP9hst8Pnv9bQtL0zrbZq_zqK0"
+  }).done(function(geoloc) {
+    // console.log(geoloc);
+    var lat = geoloc.location.lat;
+    var lng = geoloc.location.lng;
+    var coords = {lat: lat, lng: lng}
+    console.log(coords);
+    initMap(coords);
   });
+}
+
+function initMap(someCoords) {
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: someCoords, //{lat: -33.867, lng: 151.195},
+    zoom: 3,
+    mapTypeId: google.maps.MapTypeId.SATELLITE
+  });
+
+    // Add a basic style for geo data.
+    map.data.setStyle(function(feature) {
+      var mag = Math.exp(parseFloat(feature.getProperty('mag'))) * 0.1;
+      return /** @type {google.maps.Data.StyleOptions} */({
+        icon: {
+          path: google.maps.SymbolPath.CIRCLE,
+          scale: mag,
+          fillColor: '#f00',
+          fillOpacity: 0.35,
+          strokeWeight: 0
+        }
+      });
+    });
 
   infowindow = new google.maps.InfoWindow();
 
-  var service = new google.maps.places.PlacesService(map);
-  service.nearbySearch({
-    location: pyrmont,
-    radius: 500,
-    types: ['store']
-  }, callback);
+  // // Create the search box and link it to the UI element.
+  //  var input = document.getElementById('pac-input');
+  //  var searchBox = new google.maps.places.SearchBox(input);
+  //  map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+   // Bias the SearchBox results towards current map's viewport.
+  //  map.addListener('bounds_changed', function() {
+  //    searchBox.setBounds(map.getBounds());
+  //  });
+
+   var script = document.createElement('script');
+   script.setAttribute('src',
+     'https://storage.googleapis.com/maps-devrel/quakes.geo.json');
+   document.getElementsByTagName('head')[0].appendChild(script);
 }
 
-function callback(results, status) {
-  if (status === google.maps.places.PlacesServiceStatus.OK) {
-    for (var i = 0; i < results.length; i++) {
-      createMarker(results[i]);
-    }
-  }
+// Defines the callback function referenced in the jsonp file.
+function eqfeed_callback(data) {
+  map.data.addGeoJson(data);
+  console.log('EQ FEED GEOJSON DATA: ',data);
 }
 
-function createMarker(place) {
-  var placeLoc = place.geometry.location;
-  var marker = new google.maps.Marker({
-    map: map,
-    position: place.geometry.location
-  });
-
-  google.maps.event.addListener(marker, 'click', function() {
-    infowindow.setContent(place.name);
-    infowindow.open(map, this);
-  });
-}
-
-//
-// $(document).ready(initMap);
-//
-// // function init(){
-// //   console.log('init.');
-//
-//   // var promise = $.getJSON("");
-//   // promise.success(function(data) {
-//   //   console.log('data is: ', data);
-//   //
-//   // });
-//
-//   // var map;
-//   // var service;
-//   // var infowindow;
-//   //
-//   // function initialize() {
-//   //   var pyrmont = new google.maps.LatLng(-33.8665433,151.1956316);
-//   //
-//   //   map = new google.maps.Map(document.getElementById('map'), {
-//   //       center: pyrmont,
-//   //       zoom: 15
-//   //     });
-//   //
-//   //   var request = {
-//   //     location: pyrmont,
-//   //     radius: '500',
-//   //     types: ['store']
-//   //   };
-//   //
-//   //   service = new google.maps.places.PlacesService(map);
-//   //   service.nearbySearch(request, callback);
-//   // }
-//   //
-//   // function callback(results, status) {
-//   //   if (status == google.maps.places.PlacesServiceStatus.OK) {
-//   //     for (var i = 0; i < results.length; i++) {
-//   //       var place = results[i];
-//   //       createMarker(results[i]);
-//   //     }
-//   //   }
-//   // }
-//
-//   var map;
-//   var infowindow;
-//
-//   function initMap() {
-//     var pyrmont = {lat: -33.867, lng: 151.195};
-//
-//     map = new google.maps.Map(document.getElementById('map'), {
-//       center: pyrmont,
-//       zoom: 15
-//     });
-//
-//     infowindow = new google.maps.InfoWindow();
-//
-//     var service = new google.maps.places.PlacesService(map);
-//     service.nearbySearch({
-//       location: pyrmont,
-//       radius: 500,
-//       types: ['store']
-//     }, callback);
-//   }
-//
-//   function callback(results, status) {
-//     if (status === google.maps.places.PlacesServiceStatus.OK) {
-//       for (var i = 0; i < results.length; i++) {
-//         createMarker(results[i]);
-//       }
+// function callback(results, status) {
+//   console.log('debug - callback');
+//   if (status === google.maps.places.PlacesServiceStatus.OK) {
+//     for (var i = 0; i < results.length; i++) {
+//       console.log(results[i]);
+//       createMarker(results[0]);
 //     }
 //   }
+// }
+
+// function queryInput(query) {
+//   console.log(query);
+//   var service = new google.maps.places.PlacesService(map);
+//   service.textSearch({
+//     location: {lat: -33.867, lng: 151.195},
+//     radius: 500,
+//     query: query,
+//   }, callback);
+//   return false;
 //
-//   function createMarker(place) {
-//     var placeLoc = place.geometry.location;
-//     var marker = new google.maps.Marker({
-//       map: map,
-//       position: place.geometry.location
-//     });
+// }
 //
-//     google.maps.event.addListener(marker, 'click', function() {
-//       infowindow.setContent(place.name);
-//       infowindow.open(map, this);
-//     });
-//   }
-//
-//
-//
-//
-// // }
+// function createMarker(place) {
+//   var placeLoc = place.geometry.location;
+//   var marker = new google.maps.Marker({
+//     map: map,
+//     position: place.geometry.location
+//   });
+
+  // google.maps.event.addListener(marker, 'click', function() {
+  //   infowindow.setContent(place.name);
+  //   infowindow.open(map, this);
+  // });
+//}

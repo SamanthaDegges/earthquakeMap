@@ -1,33 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html>
+  <head>
+    <title>Place searches</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
 
-  <link rel="stylesheet" href="style.css">
-  <meta charset="UTF-8">
-  <title>Places</title>
-</head>
-<body>
+    <title>Places Searchbox</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div id="main">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 text-center">
+              <h4>Type in a place to see earthquake activity: </h4>
+              <form onsubmit="return queryInput(document.getElementById('query').value)">
+                <input id="query" type="text" name="query" placeholder="query">
+                <button type="button" class="btn btn-default">Submit</button>
+              </form>
+            <hr>
+            <div id="mapContainer">
+              <!-- <input id="pac-input" class="controls" type="text" placeholder="Search Box"> -->
+              <div id="map"></div>
+            </div>
+          </div>
 
-<div class="container-fluid">
-  <div id="main">
-    <div class="row">
-      <div class="col-lg-8 col-lg-offset-2">
-        <h4>MAP</h4>
-        <div id="mapContainer">
-          <div id="map"></div>
         </div>
-
       </div>
     </div>
-  </div>
-</div>
-
-<script src = "https://code.jquery.com/jquery-2.1.4.min.js"></script>
-<script src = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-<script src="main.js"></script>
-
-
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_2WXrXlP9hst8Pnv9bQtL0zrbZq_zqK0&signed_in=true&libraries=places&callback=initMap" async defer></script>
-
+    <script src = "https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src= "main.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_2WXrXlP9hst8Pnv9bQtL0zrbZq_zqK0&signed_in=true&libraries=places&callback=initMap" async defer></script>
   </body>
 </html>
