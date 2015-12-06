@@ -11,7 +11,6 @@ function getGeoLoc(data) {
     method: "POST",
     url: "https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyC_2WXrXlP9hst8Pnv9bQtL0zrbZq_zqK0"
   }).done(function(geoloc) {
-    // console.log(geoloc);
     var lat = geoloc.location.lat;
     var lng = geoloc.location.lng;
     var coords = {lat: lat, lng: lng}
